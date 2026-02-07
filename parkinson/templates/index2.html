@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroScan | Early Parkinson's Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-light: #4da6ff;
+            --primary-main: #2d87e0;
+            --primary-dark: #1a66b3;
+            --secondary-light: #a6d7ff;
+            --secondary-main: #7bc0ff;
+            --accent-teal: #2dc0c0;
+            --accent-coral: #ff7a7a;
+            --success-light: #6fcf97;
+            --warning-light: #ffb74d;
+            --light-gray: #f8fafc;
+            --medium-gray: #e2e8f0;
+            --dark-gray: #475569;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --gradient-primary: linear-gradient(135deg, #4da6ff 0%, #2d87e0 100%);
+            --gradient-secondary: linear-gradient(135deg, #7bc0ff 0%, #2dc0c0 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: var(--primary-dark) !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .nav-link {
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+            padding: 8px 16px !important;
+            margin: 0 4px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-main) !important;
+            background: rgba(77, 166, 255, 0.08);
+        }
+
+        .nav-link.active {
+            color: var(--primary-main) !important;
+            background: rgba(77, 166, 255, 0.12);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 16px;
+            right: 16px;
+            height: 2px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        /* Dropdown Menu */
+        .analysis-dropdown {
+            position: relative;
+        }
+
+        .analysis-dropdown-content {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 220px;
+            box-shadow: var(--shadow-medium);
+            border-radius: 12px;
+            padding: 8px 0;
+            z-index: 1000;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .analysis-dropdown:hover .analysis-dropdown-content {
+            display: block;
+        }
+
+        .dropdown-option {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-option:hover {
+            background: rgba(77, 166, 255, 0.08);
+            color: var(--primary-main);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--medium-gray);
+            margin: 8px 0;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e6f4ff 100%);
+            color: var(--text-primary);
+            padding: 140px 0 100px;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(135deg, rgba(77, 166, 255, 0.05) 0%, rgba(45, 135, 224, 0.05) 100%);
+            transform: rotate(15deg);
+            border-radius: 40px;
+        }
+
+        .hero-title {
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--primary-dark), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        /* Cards */
+        .info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-light);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            border: 1px solid var(--medium-gray);
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-medium);
+            border-color: var(--primary-light);
+        }
+
+        .info-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-teal));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            color: white;
+            font-size: 26px;
+            box-shadow: 0 6px 20px rgba(77, 166, 255, 0.2);
+        }
+
+        /* Team Section */
+       
+        .team-info {
+            padding: 24px;
+        }
+
+        /* Stats */
+        .stats-box {
+            background: white;
+            color: var(--text-primary);
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--medium-gray);
+            transition: all 0.3s ease;
+        }
+
+        .stats-box:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+            border-color: var(--primary-light);
+        }
+
+        .stats-number {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 6px 20px rgba(77, 166, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(77, 166, 255, 0.4);
+            color: white;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #1a66b3 100%);
+            color: white;
+            padding: 60px 0 40px;
+            margin-top: 80px;
+        }
+
+        .footer h4,
+        .footer h5 {
+            color: white;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            padding: 4px 0;
+            position: relative;
+        }
+
+        .footer-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .footer-links a:hover::before {
+            width: 20px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.4rem;
+            margin-bottom: 16px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 20px auto 0;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Spacing utilities */
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        /* Typography utilities */
+        .lead-text {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .small-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Decorative elements */
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(77, 166, 255, 0.1) 0%, rgba(45, 192, 192, 0.1) 100%);
+            z-index: -1;
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            right: -150px;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -100px;
+            left: -100px;
+        }
+
+        /* Floating animation */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* New: Analysis Options Section */
+        .analysis-options {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 80px 0;
+        }
+
+        .option-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            height: 100%;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: var(--shadow-light);
+        }
+
+        .option-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-light);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .option-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: white;
+            font-size: 32px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 120px 0 80px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .info-card {
+                padding: 24px;
+            }
+
+            .analysis-dropdown-content {
+                position: fixed;
+                top: 70px;
+                left: 10px;
+                right: 10px;
+                width: auto;
+            }
+        }
+
+        /* Badge for new feature */
+        .new-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-coral);
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <div class="brand-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                NeuroScan
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">Parkinson's Disease</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#project">Methodology</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#team">Team</a>
+                    </li>
+                    <li class="nav-item analysis-dropdown">
+                        <a class="nav-link cta-button" href="#" style="color: white !important; margin-left: 8px;">
+                            <i class="fas fa-chart-line me-1"></i>Voice Analysis
+                            <i class="fas fa-chevron-down ms-2" style="font-size: 0.8em;"></i>
+                        </a>
+                        <div class="analysis-dropdown-content">
+                            <a href="/predict" class="dropdown-option">
+                                <i class="fas fa-keyboard" style="color: var(--primary-main);"></i>
+                                <div>
+                                    <div style="font-weight: 600;">Manual Form</div>
+                                    <small class="text-muted">Enter 22 vocal parameters</small>
+                                </div>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/audio" class="dropdown-option">
+                                <i class="fas fa-microphone-alt" style="color: var(--accent-teal);"></i>
+                                <div>
+                                    <div style="font-weight: 600;">Audio Analysis</div>
+                                    <small class="text-muted">Upload voice recording</small>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="decorative-circle circle-1"></div>
+        <div class="decorative-circle circle-2"></div>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7 fade-in">
+                    <h1 class="hero-title">Early Detection of Parkinson's Disease</h1>
+                    <p class="hero-subtitle">An innovative approach based on vocal feature analysis for early and
+                        non-invasive identification using artificial intelligence.</p>
+                    <div class="mt-4 d-flex flex-wrap gap-3">
+                        <a href="/audio" class="cta-button">
+                            <i class="fas fa-play-circle"></i>Start Analysis
+                        </a>
+                        <a href="#about" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-info-circle me-2"></i>Learn More
+                        </a>
+                    </div>
+                    <div class="mt-4 d-flex gap-2">
+                        <span class="badge bg-light text-primary">94% Accuracy</span>
+                        <span class="badge bg-light text-primary">Non-invasive</span>
+                        <span class="badge bg-light text-primary">Real-time</span>
+                    </div>
+                </div>
+                <div class="col-lg-5 mt-5 mt-lg-0 fade-in floating">
+                    <div class="position-relative">
+                        <div class="info-card text-center p-5">
+                            <div class="card-icon mx-auto">
+                                <i class="fas fa-microphone-alt"></i>
+                            </div>
+                            <h4 class="mb-3">Advanced Voice Analysis</h4>
+                            <p class="lead-text mb-0">Our system analyzes 22 vocal parameters to detect subtle
+                                alterations associated with Parkinson's disease up to 5 years before motor symptoms
+                                appear.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parkinson Information -->
+    <section id="about" class="section-padding">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Understanding Parkinson's Disease</h2>
+                <p class="section-subtitle">A progressive neurodegenerative disorder affecting motor control</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-4 fade-in">
+                    <div class="info-card">
+                        <div class="card-icon">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                        <h4 class="mb-3">What is it?</h4>
+                        <p>Parkinson's disease is characterized by the progressive degeneration of dopamine-producing
+                            neurons in the substantia nigra of the brain, primarily affecting motor control.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4 fade-in">
+                    <div class="info-card">
+                        <div class="card-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h4 class="mb-3">Main Symptoms</h4>
+                        <ul class="feature-list">
+                            <li>Tremors at rest</li>
+                            <li>Muscle rigidity</li>
+                            <li>Bradykinesia (slowness)</li>
+                            <li>Balance disorders</li>
+                            <li>Voice alterations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4 fade-in">
+                    <div class="info-card">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4 class="mb-3">Epidemiology</h4>
+                        <p>Second most common neurodegenerative disease after Alzheimer's, affecting over 10 million
+                            people worldwide.</p>
+                        <div class="progress mt-4" style="height: 10px;">
+                            <div class="progress-bar" style="width: 94%; background: var(--gradient-primary);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="row mt-5 fade-in">
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stats-box">
+                        <div class="stats-number">10M+</div>
+                        <p class="mb-0">People affected</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stats-box">
+                        <div class="stats-number">60K+</div>
+                        <p class="mb-0">New cases/year (USA)</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stats-box">
+                        <div class="stats-number">60</div>
+                        <p class="mb-0">Average age at diagnosis</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stats-box">
+                        <div class="stats-number">25%</div>
+                        <p class="mb-0">Diagnosed before age 50</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Dataset Information -->
+    <section id="dataset" class="section-padding">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Reference Dataset</h2>
+                <p class="section-subtitle">Standardized vocal measurements for scientific research</p>
+            </div>
+
+            <div class="row fade-in">
+                <div class="col-12">
+                    <div class="info-card">
+                        <h3 class="mb-4">
+                            <i class="fas fa-database me-2" style="color: var(--primary-main);"></i>
+                            UCI Parkinson Dataset
+                        </h3>
+
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <h5 class="mb-3">Comprehensive Vocal Analysis Database</h5>
+                                <p class="lead-text">Our model utilizes the reference UCI Parkinson's Disease
+                                    Classification dataset, a standardized collection of vocal measurements widely used
+                                    in scientific research for Parkinson's detection.</p>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <h6 class="mb-3">
+                                            <i class="fas fa-list-alt me-2" style="color: var(--primary-main);"></i>
+                                            Key Features
+                                        </h6>
+                                        <ul class="feature-list">
+                                            <li>195 standardized voice recordings</li>
+                                            <li>22 acoustic features per sample</li>
+                                            <li>Data from 31 clinically validated patients</li>
+                                            <li>Long-term average spectra analysis</li>
+                                            <li>Nonlinear dynamic complexity measures</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="mb-3">
+                                            <i class="fas fa-user-friends me-2" style="color: var(--primary-main);"></i>
+                                            Demographics
+                                        </h6>
+                                        <ul class="feature-list">
+                                            <li>Average age: 65 years</li>
+                                            <li>23 Parkinson's patients</li>
+                                            <li>8 healthy control subjects</li>
+                                            <li>Gender-balanced sampling</li>
+                                            <li>Clinically confirmed diagnoses</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <a href="https://archive.ics.uci.edu/ml/datasets/parkinsons" target="_blank"
+                                        class="cta-button">
+                                        <i class="fas fa-external-link-alt me-2"></i>
+                                        Access Full Dataset
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 mt-4 mt-lg-0">
+                                <div class="info-card h-100">
+                                    <h5 class="text-center mb-4">Dataset Metrics</h5>
+                                    <div class="text-center">
+                                        <div class="stats-number mb-0">195</div>
+                                        <p class="mb-3">Total Samples</p>
+
+                                        <div class="stats-number mb-0">22</div>
+                                        <p class="mb-3">Vocal Parameters</p>
+
+                                        <div class="stats-number mb-0">31</div>
+                                        <p class="mb-3">Participants</p>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h5 class="mb-3">
+                                <i class="fas fa-book me-2" style="color: var(--accent-teal);"></i>
+                                Scientific Reference
+                            </h5>
+                            <div class="bg-light p-4 rounded">
+                                <p class="small-text mb-0">
+                                    Little, M., McSharry, P., Hunter, E., & Ramig, L. (2008).
+                                    <em>"Suitability of dysphonia measurements for telemonitoring of Parkinson's
+                                        disease."</em>
+                                    IEEE Transactions on Biomedical Engineering, 56(4), 1017-1024.
+                                </p>
+                                <a href="https://doi.org/10.1109/TBME.2008.2005954" target="_blank"
+                                    class="btn btn-link btn-sm mt-2">
+                                    <i class="fas fa-link me-1"></i>View Publication
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- Our Project -->
+    <section id="project" class="section-padding bg-light">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Our Methodology</h2>
+                <p class="section-subtitle">Scientific analysis based on validated acoustic data</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 fade-in">
+                    <div class="info-card">
+                        <h3 class="mb-4">
+                            <i class="fas fa-bullseye me-2" style="color: var(--accent-teal);"></i>
+                            Our Mission
+                        </h3>
+                        <p class="lead-text">As data science and AI engineering students, we've developed an innovative
+                            system for early detection of Parkinson's disease through voice analysis.</p>
+
+                        <h5 class="mt-4 mb-3">
+                            <i class="fas fa-flask me-2" style="color: var(--primary-main);"></i>
+                            Technical Approach
+                        </h5>
+                        <p>We trained several machine learning models on the UCI Parkinson's dataset, containing 22
+                            vocal features from 195 individuals.</p>
+
+                        <div class="mt-4">
+                            <h5 class="mb-3">
+                                <i class="fas fa-cogs me-2" style="color: var(--accent-teal);"></i>
+                                Tested Models
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="feature-list">
+                                        <li>Logistic Regression</li>
+                                        <li>K-Nearest Neighbors</li>
+                                        <li>Random Forest Classifier</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="feature-list">
+                                        <li>Multi-layer Perceptron</li>
+                                        <li>Support Vector Machine</li>
+                                        <li>Stacking Ensemble</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 fade-in">
+                    <div class="info-card">
+                        <h3 class="mb-4">
+                            <i class="fas fa-chart-line me-2" style="color: var(--primary-main);"></i>
+                            Results Obtained
+                        </h3>
+
+                        <div class="mb-4">
+                            <h5 class="mb-3">Best model performance:</h5>
+                            <div class="progress mb-3" style="height: 25px;">
+                                <div class="progress-bar" style="width: 94%; background: var(--gradient-primary);">
+                                    <span class="fw-bold">97% accuracy</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="mb-3">
+                                <i class="fas fa-sliders-h me-2" style="color: var(--accent-teal);"></i>
+                                Analyzed Features
+                            </h5>
+                            <div class="row">
+                                <div class="col-6">
+                                    <ul class="feature-list">
+                                        <li>Fundamental frequency</li>
+                                        <li>Jitter (variations)</li>
+                                        <li>Shimmer (amplitude)</li>
+                                        <li>HNR (harmonic-to-noise ratio)</li>
+                                    </ul>
+                                </div>
+                                <div class="col-6">
+                                    <ul class="feature-list">
+                                        <li>RPDE (entropy)</li>
+                                        <li>DFA (fluctuation analysis)</li>
+                                        <li>PPE (period entropy)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-lightbulb me-3 mt-1"
+                                    style="color: var(--accent-teal); font-size: 1.2rem;"></i>
+                                <div>
+                                    <strong>Key Advantage:</strong> The stacking ensemble approach combines the
+                                    strengths of multiple models, achieving superior predictive accuracy compared to any
+                                    single algorithm alone.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Team Section -->
+    <section id="team" class="section-padding">
+       
+
+            <div class="row mt-5 fade-in">
+                <div class="col-12">
+                    <div class="info-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h3 class="mb-4">
+                                    <i class="fas fa-graduation-cap me-2" style="color: var(--primary-main);"></i>
+                                    Our Academic Mission
+                                </h3>
+                                <p class="lead-text">This project is part of our academic journey in data science and
+                                    artificial intelligence. Our goal is to demonstrate how modern computational methods
+                                    can contribute to significant advances in public health.</p>
+                                <a href="mailto:contact@neuroscan.com" class="cta-button mt-3">
+                                    <i class="fas fa-envelope me-2"></i>Contact Us
+                                </a>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="stats-box">
+                                    <div class="stats-number">3</div>
+                                    <p>Engineering Students</p>
+                                    <i class="fas fa-users" style="color: var(--primary-light); font-size: 2rem;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="section-padding" style="background: linear-gradient(135deg, var(--primary-dark) 0%, #1a66b3 100%);">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center text-white fade-in">
+                    <h2 class="mb-4">Ready to Test Our System?</h2>
+                    <p class="lead-text mb-4" style="color: rgba(255, 255, 255, 0.9);">Try our prediction tool with
+                        standard vocal parameters or your own measurements</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <a href="/predict" class="cta-button" style="background: white; color: var(--primary-dark);">
+                            <i class="fas fa-keyboard me-2"></i>Manual Form
+                        </a>
+                        <a href="/audio" class="cta-button" style="background: var(--accent-teal);">
+                            <i class="fas fa-microphone-alt me-2"></i>Audio Analysis
+                        </a>
+                    </div>
+                    <p class="mt-3 small-text" style="color: rgba(255, 255, 255, 0.8);">
+                        <i class="fas fa-shield-alt me-2"></i>Instant analysis - No personal data stored - Results for
+                        educational purposes
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="brand-icon me-3">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h4 class="mb-0">NeuroScan</h4>
+                    </div>
+                    <p style="color: rgba(255, 255, 255, 0.85);">Academic research project in early detection of
+                        Parkinson's disease through computational acoustic analysis.</p>
+                    <div class="mt-4">
+                        <p class="small-text mb-2" style="color: rgba(255, 255, 255, 0.7);">
+                            <i class="fas fa-envelope me-2"></i>contact@neuroscan.com
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-4">
+                        <i class="fas fa-link me-2"></i>
+                        Navigation
+                    </h5>
+                    <div class="footer-links">
+                        <a href="#home">Home</a>
+                        <a href="#about">Parkinson's Disease</a>
+                        <a href="#project">Our Methodology</a>
+                        <a href="#team">The Team</a>
+                        <a href="#analysis-options">Analysis Options</a>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-4">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        Important Notice
+                    </h5>
+                    <p class="small-text" style="color: rgba(255, 255, 255, 0.85);">
+                        This project is intended for research and educational purposes only.
+                        The results do not constitute a medical diagnosis. Always consult
+                        a healthcare professional for any medical concerns.
+                    </p>
+                    <p class="small-text mt-4" style="color: rgba(255, 255, 255, 0.7);">
+                        <i class="far fa-copyright me-1"></i> 2023 NeuroScan Project. Academic work.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navigation scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Animation on scroll
+        document.addEventListener('DOMContentLoaded', function () {
+            const fadeElements = document.querySelectorAll('.fade-in');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            fadeElements.forEach(element => {
+                observer.observe(element);
+            });
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    if (this.getAttribute('href') === '#') return;
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        e.preventDefault();
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Mobile menu handling for dropdown
+            const dropdownToggle = document.querySelector('.analysis-dropdown > a');
+            const dropdownContent = document.querySelector('.analysis-dropdown-content');
+
+            if (window.innerWidth < 768) {
+                dropdownToggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (!dropdownToggle.contains(e.target) && !dropdownContent.contains(e.target)) {
+                        dropdownContent.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

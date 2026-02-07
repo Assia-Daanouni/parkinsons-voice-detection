@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroScan | Analyse Vocale Parkinson</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-light: #4da6ff;
+            --primary-main: #2d87e0;
+            --primary-dark: #1a66b3;
+            --secondary-light: #a6d7ff;
+            --secondary-main: #7bc0ff;
+            --accent-teal: #2dc0c0;
+            --accent-coral: #ff7a7a;
+            --success-light: #6fcf97;
+            --warning-light: #ffb74d;
+            --light-gray: #f8fafc;
+            --medium-gray: #e2e8f0;
+            --dark-gray: #475569;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --gradient-primary: linear-gradient(135deg, #4da6ff 0%, #2d87e0 100%);
+            --gradient-secondary: linear-gradient(135deg, #7bc0ff 0%, #2dc0c0 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #f0f9ff 0%, #e6f4ff 100%);
+            min-height: 100vh;
+            padding: 40px 0;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+
+        /* Header Card */
+        .header-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--medium-gray);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .header-title {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 30px;
+            border: 1px solid var(--medium-gray);
+            position: relative;
+        }
+
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .main-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Form Elements */
+        .form-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label i {
+            color: var(--primary-main);
+            width: 20px;
+        }
+
+        .form-control {
+            border: 2px solid var(--medium-gray);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            font-family: 'SF Mono', 'Roboto Mono', monospace;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--text-primary);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(77, 166, 255, 0.15);
+            outline: none;
+        }
+
+        .form-control:hover {
+            border-color: #bdc1c6;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+            border: 1px solid var(--medium-gray);
+            position: relative;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+            border-color: var(--primary-light);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-light);
+            font-size: 1rem;
+        }
+
+        /* Buttons */
+        .submit-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(77, 166, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(77, 166, 255, 0.4);
+            color: white;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            color: var(--primary-main);
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-main);
+            box-shadow: var(--shadow-light);
+        }
+
+        .home-btn:hover {
+            background: var(--light-gray);
+            color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* Results Section */
+        .result-alert {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 40px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--medium-gray);
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-positive {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+            border-left: 4px solid var(--accent-coral);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .result-negative {
+            background: linear-gradient(135deg, #f0fff4 0%, #e6ffe6 100%);
+            border-left: 4px solid var(--success-light);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .result-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .result-positive .result-icon {
+            color: var(--accent-coral);
+        }
+
+        .result-negative .result-icon {
+            color: var(--success-light);
+        }
+
+        .result-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .result-positive .result-text {
+            color: var(--accent-coral);
+        }
+
+        .result-negative .result-text {
+            color: var(--success-light);
+        }
+
+        /* Section Title */
+        .section-title {
+            color: var(--primary-dark);
+            font-weight: 600;
+            margin-bottom: 30px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--medium-gray);
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--gradient-primary);
+        }
+
+        .section-title i {
+            color: var(--primary-main);
+        }
+
+        /* Info Badge */
+        .info-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--light-gray);
+            color: var(--primary-main);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Alert Messages */
+        .alert {
+            border-radius: 12px;
+            border: 1px solid;
+            border-left: 4px solid;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);
+            border-color: #ffecb3;
+            border-left-color: var(--warning-light);
+            color: #5d4037;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #e0f2e1 100%);
+            border-color: #c8e6c9;
+            border-left-color: var(--success-light);
+            color: #1b5e20;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #e1f5fe 100%);
+            border-color: #bbdefb;
+            border-left-color: var(--primary-light);
+            color: #0d47a1;
+        }
+
+        .alert-light {
+            background: var(--light-gray);
+            border-color: var(--medium-gray);
+            border-left-color: var(--medium-gray);
+            color: var(--text-secondary);
+        }
+
+        .alert i {
+            margin-right: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 0;
+            }
+            
+            .header-card,
+            .main-card {
+                padding: 25px;
+            }
+            
+            .header-title {
+                font-size: 1.8rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, .3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Input Focus Effects */
+        .feature-card:focus-within {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-light);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-gray);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-main);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header-card">
+            <h1 class="header-title">
+                <i class="fas fa-brain"></i>
+                Parkinson Detection
+            </h1>
+            <p class="header-subtitle">Analyze your vocal parameters for a risk assessment based on scientific methods.</p>
+        </div>
+
+        <!-- Main Form Card -->
+       <!-- Main Form Card -->
+<div class="main-card">
+    <form method="POST">
+        <h4 class="section-title">
+            <i class="fas fa-wave-square"></i>
+            Vocal Analysis Parameters
+            <span class="info-badge">
+                <i class="fas fa-chart-bar"></i>
+                22 vocal features
+            </span>
+        </h4>
+
+        <div class="feature-grid">
+            <!-- Row 1 -->
+            <div class="feature-card">
+                <label class="form-label">MDVP:Fo (Hz)</label>
+                <div class="position-relative">
+                    <input type="number" step="0.000001" name="f1" class="form-control" value="148.143000" required>
+                    <span class="input-icon"><i class="fas fa-hertz"></i></span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">MDVP:Fhi (Hz)</label>
+                <div class="position-relative">
+                    <input type="number" step="0.000001" name="f2" class="form-control" value="155.982000" required>
+                    <span class="input-icon"><i class="fas fa-arrow-up"></i></span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">MDVP:Flo (Hz)</label>
+                <div class="position-relative">
+                    <input type="number" step="0.000001" name="f3" class="form-control" value="135.041000" required>
+                    <span class="input-icon"><i class="fas fa-arrow-down"></i></span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">Jitter (%)</label>
+                <div class="position-relative">
+                    <input type="number" step="0.000001" name="f4" class="form-control" value="0.003920" required>
+                    <span class="input-icon"><i class="fas fa-percentage"></i></span>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="feature-card">
+                <label class="form-label">Jitter (Abs)</label>
+                <input type="number" step="0.000001" name="f5" class="form-control" value="0.000030" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">RAP</label>
+                <input type="number" step="0.000001" name="f6" class="form-control" value="0.002040" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">PPQ</label>
+                <input type="number" step="0.000001" name="f7" class="form-control" value="0.002310" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">Jitter DDP</label>
+                <input type="number" step="0.000001" name="f8" class="form-control" value="0.006120" required>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="feature-card">
+                <label class="form-label">Shimmer</label>
+                <input type="number" step="0.000001" name="f9" class="form-control" value="0.014500" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">Shimmer (dB)</label>
+                <input type="number" step="0.000001" name="f10" class="form-control" value="0.131000" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">APQ3</label>
+                <input type="number" step="0.000001" name="f11" class="form-control" value="0.007250" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">APQ5</label>
+                <input type="number" step="0.000001" name="f12" class="form-control" value="0.008760" required>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="feature-card">
+                <label class="form-label">APQ</label>
+                <input type="number" step="0.000001" name="f13" class="form-control" value="0.012630" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">DDA</label>
+                <input type="number" step="0.000001" name="f14" class="form-control" value="0.021750" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">NHR</label>
+                <input type="number" step="0.000001" name="f15" class="form-control" value="0.005400" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">HNR</label>
+                <div class="position-relative">
+                    <input type="number" step="0.000001" name="f16" class="form-control" value="23.683000" required>
+                    <span class="input-icon"><i class="fas fa-db"></i></span>
+                </div>
+            </div>
+
+            <!-- Row 5 -->
+            <div class="feature-card">
+                <label class="form-label">RPDE</label>
+                <input type="number" step="0.000001" name="f17" class="form-control" value="0.398499" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">DFA</label>
+                <input type="number" step="0.000001" name="f18" class="form-control" value="0.778349" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">spread1</label>
+                <input type="number" step="0.000001" name="f19" class="form-control" value="-5.711205" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">spread2</label>
+                <input type="number" step="0.000001" name="f20" class="form-control" value="0.240875" required>
+            </div>
+
+            <!-- Row 6 -->
+            <div class="feature-card">
+                <label class="form-label">D2</label>
+                <input type="number" step="0.000001" name="f21" class="form-control" value="2.845109" required>
+            </div>
+
+            <div class="feature-card">
+                <label class="form-label">PPE</label>
+                <input type="number" step="0.000001" name="f22" class="form-control" value="0.192730" required>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+            <i class="fas fa-bolt"></i>
+            Start analysis
+        </button>
+    </form>
+</div>
+
+
+            <!-- Results Section -->
+            {% if result %}
+            <div class="result-alert">
+                {% if result.type == 'warning' %}
+                <div class="result-positive">
+                    <i class="fas fa-exclamation-circle result-icon"></i>
+                    <div class="result-text">{{ result.message }}</div>  <!-- CHANGÉ -->
+                    <p>{{ result.details }}</p>  <!-- CHANGÉ -->
+                </div>
+                <div class="alert alert-warning mt-3">
+                    <i class="fas fa-stethoscope"></i>
+                    <strong>Recommendation :</strong> {{ result.recommendation }}  <!-- CHANGÉ -->
+                </div>
+                                {% else %}
+                <div class="result-negative">
+                    <i class="fas fa-check-circle result-icon"></i>
+                    <div class="result-text">{{ result.message }}</div>  <!-- CHANGÉ -->
+                    <p>{{ result.details }}</p>  <!-- CHANGÉ -->
+                </div>
+                <div class="alert alert-success mt-3">
+                    <i class="fas fa-heart"></i>
+                    <strong>Excellent !</strong> {{ result.recommendation }}  <!-- CHANGÉ -->
+                </div>
+                {% endif %}
+
+                <!-- Statistics -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="alert" style="background: var(--light-gray); border-color: var(--medium-gray);">
+                            <div class="row text-center">
+                                <div class="col-md-3 col-6 mb-3">
+                                    <div class="text-primary fw-bold">22</div>
+                                    <small class="text-muted">Parameters</small>
+                                </div>
+                                <div class="col-md-3 col-6 mb-3">
+                                    <div class="text-primary fw-bold">97%</div>
+                                    <small class="text-muted">Precision</small>
+                                </div>
+                                <div class="col-md-3 col-6 mb-3">
+                                    <div class="text-primary fw-bold">195</div>
+                                    <small class="text-muted">Samples</small>
+                                </div>
+                                <div class="col-md-3 col-6 mb-3">
+                                    <div class="text-primary fw-bold">UCI</div>
+                                    <small class="text-muted">Dataset</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Home Button -->
+            <div class="text-center mt-4">
+                <a href="/" class="home-btn">
+                    <i class="fas fa-home"></i>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>
+                <i class="fas fa-brain text-primary"></i>
+                <strong>NeuroScan</strong> - Early Detection System for Parkinson's Disease
+            </p>
+            <p class="text-muted small">This tool is intended for educational purposes only and does not replace professional medical diagnosis.</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Animation for form inputs
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function () {
+                this.parentElement.parentElement.style.transform = 'translateY(-2px)';
+                this.parentElement.parentElement.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.12)';
+            });
+
+            input.addEventListener('blur', function () {
+                this.parentElement.parentElement.style.transform = 'translateY(0)';
+                this.parentElement.parentElement.style.boxShadow = 'var(--shadow-light)';
+            });
+        });
+
+        // Auto-format numbers with 6 decimal places
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('blur', function () {
+                if (this.value) {
+                    const value = parseFloat(this.value);
+                    if (!isNaN(value)) {
+                        this.value = value.toFixed(6);
+                    }
+                }
+            });
+        });
+
+        // Show loading animation on submit
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const submitBtn = document.getElementById('submitBtn');
+            const originalContent = submitBtn.innerHTML;
+            
+            // Validate all inputs
+            const inputs = this.querySelectorAll('input[type="number"]');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (!input.value || isNaN(parseFloat(input.value))) {
+                    input.style.borderColor = 'var(--accent-coral)';
+                    isValid = false;
+                } else {
+                    input.style.borderColor = '';
+                }
+            });
+            
+            if (!isValid) {
+                alert('Veuillez remplir tous les champs avec des valeurs numériques valides.');
+                e.preventDefault();
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.innerHTML = '<span class="loading"></span>Analyse en cours...';
+            submitBtn.disabled = true;
+            
+            // Restore button after 3 seconds (in case of error)
+            setTimeout(() => {
+                submitBtn.innerHTML = originalContent;
+                submitBtn.disabled = false;
+            }, 3000);
+        });
+
+        // Input validation and formatting
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('input', function() {
+                this.style.borderColor = '';
+                
+                // Format as user types (optional)
+                if (this.value.includes(',')) {
+                    this.value = this.value.replace(',', '.');
+                }
+            });
+        });
+
+        // Add hover effect to feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-4px)';
+                this.style.boxShadow = 'var(--shadow-medium)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                if (!this.querySelector('.form-control:focus')) {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'var(--shadow-light)';
+                }
+            });
+        });
+
+        // Initialize tooltips
+        document.querySelectorAll('.form-label i').forEach(icon => {
+            icon.setAttribute('title', icon.parentElement.textContent.trim());
+        });
+    </script>
+</body>
+
+</html>
